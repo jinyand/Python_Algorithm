@@ -1,9 +1,9 @@
 # 🌼 Algorithm (Python) 🌼
 
 [🎈 파이썬 주요 라이브러리](https://github.com/jinyand/Python_Algorithm/wiki/%ED%8C%8C%EC%9D%B4%EC%8D%AC-%EC%A3%BC%EC%9A%94-%EB%9D%BC%EC%9D%B4%EB%B8%8C%EB%9F%AC%EB%A6%AC)  
-[🎈 DFS/BFS]()  
-[🎈 정렬]()  
-[🎈 이진 탐색]()  
+[🎈 DFS/BFS](https://github.com/jinyand/Python_Algorithm#-dfsbfs)  
+[🎈 정렬](https://github.com/jinyand/Python_Algorithm#-%EC%A0%95%EB%A0%AC)  
+[🎈 이진 탐색](https://github.com/jinyand/Python_Algorithm#-%EC%9D%B4%EC%A7%84-%ED%83%90%EC%83%89)  
 
 
 ## 🔍 DFS/BFS

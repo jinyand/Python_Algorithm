@@ -4,8 +4,8 @@
 [◾ DFS/BFS](https://github.com/jinyand/Python_Algorithm#-dfsbfs)  
 [◾ 정렬](https://github.com/jinyand/Python_Algorithm#-%EC%A0%95%EB%A0%AC)  
 [◾ 이진 탐색](https://github.com/jinyand/Python_Algorithm#-%EC%9D%B4%EC%A7%84-%ED%83%90%EC%83%89)  
-[◾ 다이나믹 프로그래밍](https://github.com/jinyand/Python_Algorithm/blob/main/README.md#-%EB%8B%A4%EC%9D%B4%EB%82%98%EB%AF%B9-%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D)
-
+[◾ 다이나믹 프로그래밍](https://github.com/jinyand/Python_Algorithm/blob/main/README.md#-%EB%8B%A4%EC%9D%B4%EB%82%98%EB%AF%B9-%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D)  
+[◾ 최단 경로](https://github.com/jinyand/Python_Algorithm/blob/main/README.md#-%EC%B5%9C%EB%8B%A8-%EA%B2%BD%EB%A1%9C)
 
 ## 🔍 DFS/BFS
 - 그래프의 기본 구조

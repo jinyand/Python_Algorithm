@@ -595,3 +595,50 @@ for i in range(1, n+1):
   else:
     print(distance[i])
 ```
+
+
+### ▶플로이드 워셜 알고리즘
+
+- '모든 지점에서 다른 모든 지점까지의 최단 경로를 모두 구해야 하는 경우'에 사용할 수 있는 알고리즘
+- 노드의 개수가 N개일 때 알고리즘상으로 N번의 단계를 수행하며, 단계마다 O(N^2)의 연산을 통해 '현재 노드를 거쳐 가는' 모든 경로를 고려한다. 따라서 시간 복잡도는 O(N^3)이다.
+- 다익스트라 알고리즘과는 다르게 2차원 리스트에 '최단 거리' 정보를 저장한다.
+- 다익스트라 = 그리디, 플로이드 워셜 = 다이나믹 프로그래밍
+    - 노드의 개수가 N이라고 할 때, N번 만큼의 단계를 반복하며 '점화식에 맞게' 2차원 리스트를 갱신하기 때문
+   
+- 'A에서 B로 가는 최소 비용'과 'A에서 K를 거쳐 B로 가는 비용'을 비교하여 더 작은 값으로 갱신
+
+```python
+INF = int(1e9)
+
+n = int(input()) # 노드
+m = int(input()) # 간선
+
+graph = [[INF] * (n+1) for _ in range(n+1)]
+
+# 자기 자신 -> 자기 자신 비용 0으로 초기화
+for i in range(1, n+1):
+  for j in range(1, n+1):
+    if i == j:
+      graph[i][j] = 0
+
+# 각 간선에 대한 정보
+for _ in range(m):
+  # a에서 b로 가는 비용 c
+  a, b, c = map(int, input().split())
+  graph[a][b] = c
+
+# 점화식에 따라 플로이드 워셀 알고리즘 수행
+for k in range(1, n+1):
+  for a in range(1, n+1):
+    for b in range(1, n+1):
+      # 노드 k를 거쳐 가는 비용과 비교
+      graph[a][b] = min(graph[a][b], graph[a][k] + graph[k][b])
+
+for a in range(1, n+1):
+  for b in range(1, n+1):
+    if graph[a][b] == INF:
+      print("INF", end=" ")
+    else:
+      print(graph[a][b], end=" ")
+  print()
+```

@@ -642,3 +642,196 @@ for a in range(1, n+1):
       print(graph[a][b], end=" ")
   print()
 ```
+
+<br>
+
+## 🔍 그래프 이론
+- 그래프 : 노드와 노드 사이에 연결된 간선의 정보를 가지고 있는 자료구조
+- '서로 다른 개체(or 객체)가 연결되어 있다 = 그래프 알고리즘
+- [그래프에 관한 설명](https://github.com/jinyand/Python_Algorithm/blob/main/README.md#-dfsbfs)
+- 다익스트라 : 인접 리스트 / 플로이드 워셜 : 인접 행렬
+- 최단 경로 문제에서, 노드의 개수가 적은 경우에는 플로이드 워셜, 많은 경우에는 우선순위 큐를 이용하는 다익스트라 알고리즘을 이용하면 유리하다.
+
+### ▶ 서로소 집합 자료구조
+
+- 서로소 집합 : 공통 원소가 없는 두 집합
+- 서로소 집합 자료구조 : 서로소 부분 집합들로 나누어진 원소들의 데이터를 처리하기 위한 자료구조, union과 find 연산으로 조작할 수 있다.
+    - union(합집합) 연산 : 2개의 원소가 포함된 집합을 하나의 집합으로 합치는 연산
+    - fine(찾기) 연산 : 특정한 원소가 속한 집합이 어떤 집합인지 알려주는 연산
+- 트리 자료구조를 이용하여 집합을 표현한다.
+1. union 연산을 확인하여, 서로 연결된 두 노드 A, B를 확인한다.
+    1. A와 B의 루트 노드 A', B'를 각각 찾는다.
+    2. A'를 B'의 부모 노드로 설정한다. (B'가 A'를 가리키도록 한다) (번호가 더 작은 원소가 부모 노드가 되는 경우가 많음)
+2. 모든 union 연산을 처리할 때까지 1번 과정을 반복한다. 
+- 이 알고리즘에서 유의할 점은 union 연산을 효과적으로 수행하기 위해 '부모 테이블'을 항상 가지고 있어야 한다는 점이다. 또한 루트 노드를 즉시 계산할 수 없고, 부모 테이블을 계속해서 확인하며 거슬러 올라가야 한다.
+
+    ```python
+    # 특정 원소가 속한 집합을 찾기
+    def find_parent(parent, x):
+      # 루트 노드가 아니라면, 루트 노드를 찾을 때까지 재귀적으로 호출
+      if parent[x] != x:
+        return find_parent(parent, parent[x])
+      return x
+
+    # 두 원소가 속한 집합을 합치기
+    def union_parent(parent, a, b):
+      a = find_parent(parent, a)
+      b = find_parent(parent, b)
+      
+      if a < b:
+        parent[b] = a
+      else:
+        parent[a] = b
+
+    # 노드의 개수와 간선의 개수 입력받기
+    v, e = map(int, input().split())
+    parent = [0] * (v+1)
+
+    # 부모 테이블상에서, 부모를 자기 자신으로 초기화
+    for i in range(1, v+1):
+      parent[i] = i
+
+    # union 연산을 각각 수행
+    for i in range(e):
+      a, b = map(int, input().split())
+      union_parent(parent, a, b)
+
+    # 각 원소가 속한 집합 출력
+    print('각 원소가 속한 집합 : ', end = '')
+    for i in range(1, v+1):
+      print(find_parent(parent, i), end = ' ')
+
+    print()
+
+    #  부모테이블 내용 출력
+    print("부모 테이블 : ", end = '')
+    for i in range(1, v+1):
+      print(parent[i], end = ' ')
+    ```
+
+- 이렇게 구현하면 find 함수가 비효율적으로 동작하여 최악의 경우 시간 복잡도가 O(V)
+
+    → 경로 압축 기법을 적용하여 시간 복잡도를 개선시킬 수 있다.
+
+- 경로 압축 기법 : find 함수를 재귀적으로 호출한 뒤에 부모 테이블값을 갱신하는 기법
+
+    ```python
+    def find_parent(parent, x):
+    	if parent[x] != x:
+    		parent[x] = find_parent(parent, parent[x])
+    	return parent[x]
+    ```
+
+    - 각 노드에 대하여 find 함수를 호출한 이후에, 해당 노드의 루트 노드가 바로 부모 노드가 된다.
+
+### ▶ 신장 트리
+
+- 신장 트리 : 하나의 그래프가 있을 때 모든 노드를 포함하면서 사이클이 존재하지 않는 부분 그래프
+- 크루스칼 알고리즘 : 대표적인 최소 신장 트리 알고리즘
+    1. 간선 데이터를 비용에 따라 오름차순으로 정렬한다.
+    2. 간선을 하나씩 확인하며 현재의 간선이 사이클을 발생시키는지 확인한다.
+        1. 사이클이 발생하지 않는 경우 최소 신장 트리에 포함시킨다.
+        2. 사이클이 발생하는 경우 최소 신장 트리에 포함시키지 않는다.
+    3. 모든 간선에 대하여 2번의 과정을 반복한다.
+
+    ```python
+    # 특정 원소가 속한 집합을 찾기
+    def find_parent(parent, x):
+      if parent[x] != x:
+        parent[x] = find_parent(parent, parent[x])
+      return parent[x]
+
+    # 두 원소가 속한 집합을 합치기
+    def union_parent(parent, a, b):
+      a = find_parent(parent, a)
+      b = find_parent(parent, b)
+      
+      if a < b:
+        parent[b] = a
+      else:
+        parent[a] = b
+
+    # 노드의 개수와 간선의 개수 입력받기
+    v, e = map(int, input().split())
+    parent = [0] * (v+1)
+
+    # 모든 간선을 담을 리스트와 최종 비용을 담을 변수
+    edges = []
+    result = 0
+
+    # 부모 테이블상에서, 부모를 자기 자신으로 초기화
+    for i in range(1, v+1):
+      parent[i] = i
+
+    # 모든 간선에 대한 정보를 입력받기
+    for _ in range(e):
+      a, b, cost = map(int, input().split())
+      edges.append((cost, a, b))
+
+    edges.sort() # 비용순으로 정렬
+
+    # 간선을 하나씩 확인하며
+    for edge in edges:
+      cost, a, b = edge
+      # 사이클이 발생하지 않을 경우에만 집합에 포함
+      if find_parent(parent, a) != find_parent(parent, b):
+        union_parent(parent, a, b)
+        result += cost
+
+    print(result)
+    ```
+
+    - 시간 복잡도 : 간선의 개수가 E개일 때, O(ElogE)의 시간 복잡도를 가진다.
+
+### ▶ 위상 정렬
+
+- 방향 그래프의 모든 노드를 '방향성에 거스르지 않도록 순서대로 나열하는 것'
+- 진입차수 : 특정한 노드로 '들어오는' 간선의 개수
+1. 진입차수가 0인 노드를 큐에 넣는다.
+2. 큐가 빌 때까지 다음의 과정을 반복한다.
+    1. 큐에서 원소를 꺼내 해당 노드에서 출발하는 간선을 그래프에서 제거한다.
+    2. 새롭게 진입차수가 0이 된 노드를 큐에 넣는다.
+
+```python
+from collections import deque
+
+v, e = map(int, input().split()) # 노드, 간선
+# 모든 노드에 대한 진입차수는 0으로 초기화
+indegree = [0] * (v+1)
+# 각 노드에 연결된 간선 정보를 담기 위한 연결 리스트(그래프)
+graph = [[] for i in range(v+1)]
+
+# 모든 간선 정보 입력받기
+for _ in range(e):
+  a, b = map(int, input().split())
+  graph[a].append(b) # 정점 A에서 B로 이동 가능
+  indegree[b] += 1 # 진입 차수 1 증가
+
+# 위상 정렬 함수
+def topology_sort():
+  result = []
+  q = deque()
+
+  # 진입차수가 0인 노드를 큐에 삽입
+  for i in range(1, v+1):
+    if indegree[i] == 0:
+      q.append(i)
+
+  while q:
+    now = q.popleft()
+    result.append(now)
+
+    # 해당 원소와 연결된 노드들의 진입차수에서 1 빼기
+    for i in graph[now]:
+      indegree[i] -= 1
+      # 새롭게 진입차수가 0이 되는 노드를 큐에 삽입
+      if indegree[i] == 0:
+        q.append(i)
+
+  for i in result:
+    print(i, end=' ')  
+
+topology_sort()
+```
+
+- 위상 정렬의 시간 복잡도 : 노드와 간선을 모두 확인하기 때문에 O(V+E)
